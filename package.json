@@ -1,0 +1,46 @@
+{
+  "name": "z-platform",
+  "version": "1.0.0",
+  "description": "ZPlatform is a user management platform for ease on-boarding for new users",
+  "main": "app.js",
+  "scripts": {
+    "start": "node -r dotenv/config -r @babel/register src/app.js",
+    "start:dev": "nodemon --exec npx babel-node ./server/app.js",
+    "build": "babel src -d dist",
+    "serve": "node -r dotenv/config dist/app.js",
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MugiranezaJ/z-platform.git"
+  },
+  "author": "MugiranezaJ",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/MugiranezaJ/z-platform/issues"
+  },
+  "homepage": "https://github.com/MugiranezaJ/z-platform#readme",
+  "dependencies": {
+    "@babel/cli": "^7.17.6",
+    "@babel/core": "^7.17.9",
+    "@babel/plugin-transform-runtime": "^7.19.1",
+    "@babel/preset-env": "^7.19.1",
+    "@babel/register": "^7.18.9",
+    "@babel/runtime": "^7.17.9",
+    "axios": "^0.26.1",
+    "bcrypt": "^5.1.0",
+    "chai": "^4.3.4",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.0",
+    "express": "^4.17.3",
+    "express-validator": "^7.0.1",
+    "jsonwebtoken": "^9.0.0",
+    "mocha": "^9.1.1",
+    "mongoose": "^7.1.1"
+  },
+  "devDependencies": {
+    "@babel/node": "^7.16.8",
+    "@babel/polyfill": "^7.12.1",
+    "nodemon": "^2.0.15"
+  }
+}
