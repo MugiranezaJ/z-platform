@@ -39,7 +39,7 @@ const VerifyAccount = () => {
             for the process to finish
           </p>
         )}
-        {!["PENDING VERIFICATION"].includes(profile.profile?.accountStatus) && (
+        {["UNVERIFIED"].includes(profile.profile?.accountStatus) && (
           <form
             onSubmit={handleSubmit}
             className="space-y-3 w-full px-5 max-w-lg"
