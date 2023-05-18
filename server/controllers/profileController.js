@@ -4,9 +4,10 @@ import { verifyToken } from "../utils/auth";
 // Get user profile controller
 export const getUserProfile = async (req, res) => {
   try {
-    const userId = req.body.userId;
+    const userId = req.query.userId;
 
     // Find the user by their ID
+    if (!userId) return res.status(400).json({ error: "user Id is needed" });
     const user = await User.findById(userId);
 
     if (!user) {
@@ -24,6 +25,7 @@ export const getUserProfile = async (req, res) => {
 // Update user profile controller
 export const updateUserProfile = async (req, res) => {
   try {
+    console.log(req.headers);
     const token = req.headers.authorization?.split(" ")[1];
     if (!token)
       return res.status(403).json({ message: "unauthorized access!" });
@@ -60,7 +62,6 @@ export const updateUserProfile = async (req, res) => {
     await user.save();
 
     res.status(200).json(user);
-    
   } catch (error) {
     console.error("Error in updateUserProfile:", error);
     res.status(500).json({ error: "Server error" });

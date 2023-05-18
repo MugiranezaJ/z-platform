@@ -28,11 +28,13 @@ import config from "./config";
 import authRoutes from "./routes/authRoutes";
 import profileRoutes from "./routes/profileRoutes";
 import verificationRoutes from "./routes/verificationRoutes";
+import cors from "cors";
 
 dotenv.config();
 
 const app = express();
-const port = process.env.PORT || 3000;
+const port = config.port;
+app.use(cors());
 
 console.log("BD_URL", config.db.connectionString);
 // Connect to the database

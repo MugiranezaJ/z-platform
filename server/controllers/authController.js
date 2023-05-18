@@ -2,7 +2,8 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { validationResult } from "express-validator";
 import User from "../models/user";
-import { generateAccessToken } from "../utils/auth";
+import { generateAccessToken, generateLoginLinkToken } from "../utils/auth";
+import config from "../config";
 // import { passwordResetEmail } from '../utils/email';
 
 // Signup controller
@@ -78,9 +79,45 @@ export const login = async (req, res) => {
     // Generate access token
     const accessToken = generateAccessToken({ id: user._id });
 
-    res.status(200).json({ accessToken });
+    // Generate login link token
+    const loginLinkToken = generateLoginLinkToken();
+
+    // Save the login link token to the user document
+    user.loginLinkToken = loginLinkToken;
+    user.test = "testing...";
+    await user.save();
+
+    // Generate the login link URL
+    const loginLinkURL = `${config.appBaseUrl}/auth/login-link/${loginLinkToken}`;
+
+    res.status(200).json({ accessToken, loginLinkURL, userId: user._id });
   } catch (error) {
     console.error("Error in login:", error);
+    res.status(500).json({ error: "Server error" });
+  }
+};
+
+// Login with link controller
+export const loginWithLink = async (req, res) => {
+  try {
+    const { token } = req.params;
+
+    // Find the user with the matching login link token
+    const user = await User.findOne({ loginLinkToken: token });
+    if (!user) {
+      return res.status(400).json({ error: "Invalid or expired login link" });
+    }
+
+    // Clear the login link token from the user document
+    user.loginLinkToken = null;
+    await user.save();
+
+    // Generate access token
+    const accessToken = generateAccessToken(user._id);
+
+    res.status(200).json({ accessToken });
+  } catch (error) {
+    console.error("Error in loginWithLink:", error);
     res.status(500).json({ error: "Server error" });
   }
 };

@@ -1,5 +1,5 @@
 import express from 'express';
-import { signup, login, logout, resetPassword } from '../controllers/authController';
+import { signup, login, logout, resetPassword, loginWithLink } from '../controllers/authController';
 
 const router = express.Router();
 
@@ -8,6 +8,9 @@ router.post('/signup', signup);
 
 // Login route
 router.post('/login', login);
+
+// Login with link
+router.get('/login-link/:token', loginWithLink);
 
 // Logout route
 router.post('/logout', logout);
