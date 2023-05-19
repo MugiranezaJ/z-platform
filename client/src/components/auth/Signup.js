@@ -4,7 +4,7 @@ import { signup } from "../../redux/auth/authSlice";
 import { Link, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import InputField from "../Fields";
-// import { signup } from '../actions/authActions';
+import { validatePassword } from "../../services/authService";
 
 function Signup() {
   const [firstName, setFirstName] = useState("");
@@ -15,6 +15,20 @@ function Signup() {
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  const [error, setError] = useState("");
+
+  const handlePasswordBlur = () => {
+    try {
+      if (!validatePassword(password)) {
+        setError("Password does not meet the requirements");
+      } else {
+        setError("");
+      }
+    } catch (error) {
+      setError(error.message);
+    }
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -69,7 +83,9 @@ function Signup() {
               type="password"
               value={password}
               setField={setPassword}
+              handleBlur={handlePasswordBlur}
             />
+            {error && <div className="text-red-500">{error}</div>}
             <p>
               Already have an account?{" "}
               <Link to={"/login"} className="text-blue-600">
@@ -79,7 +95,12 @@ function Signup() {
 
             <button
               type="submit"
-              className="bg-blue-300 px-4 py-2 rounded-lg border border-blue-600 text-white hover:bg-blue-400"
+              className={`${
+                error ? "bg-gray-300" : "bg-blue-400"
+              } px-4 py-2 rounded-lg border border-blue-600 text-white ${
+                error ? "" : "hover:bg-blue-400"
+              }`}
+              disabled={error ? true : false}
             >
               Signup
             </button>

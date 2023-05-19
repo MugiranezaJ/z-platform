@@ -1,12 +1,13 @@
 import bcrypt from "bcrypt";
-import jwt from "jsonwebtoken";
 import { validationResult } from "express-validator";
 import User from "../models/user";
-import { generateAccessToken, generateLoginLinkToken } from "../utils/auth";
+import {
+  generateAccessToken,
+  generateLoginLinkToken,
+  validatePassword,
+} from "../utils/auth";
 import config from "../config";
-// import { passwordResetEmail } from '../utils/email';
 
-// Signup controller
 export const signup = async (req, res) => {
   try {
     // Check for validation errors
@@ -16,6 +17,9 @@ export const signup = async (req, res) => {
     }
 
     const { firstName, lastName, email, password } = req.body;
+
+    // check password validity
+    validatePassword(password);
 
     // Check if user already exists with the given email
     const existingUser = await User.findOne({ email });
@@ -28,7 +32,6 @@ export const signup = async (req, res) => {
     // Hash the password
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // Create the user
     const newUser = new User({
       firstName,
       lastName,
@@ -36,20 +39,14 @@ export const signup = async (req, res) => {
       password: hashedPassword,
     });
 
-    // Save the user to the database
     await newUser.save();
 
-    console.log("#1......", newUser);
-    // Generate access token
     const accessToken = generateAccessToken({ id: newUser._id });
 
-    console.log("#2......", newUser);
-
     res.status(201).json({ accessToken });
-    console.log("#3......");
   } catch (error) {
     console.error("Error in signup:", error);
-    res.status(500).json({ error: "Server error" });
+    res.status(500).json({ error: "Server error", message: error });
   }
 };
 
@@ -62,7 +59,7 @@ export const login = async (req, res) => {
       return res.status(400).json({ errors: errors.array() });
     }
 
-    const { email, password } = req.body;
+    const { email, password, sendLoginLink } = req.body;
 
     // Check if user exists with the given email
     const user = await User.findOne({ email });

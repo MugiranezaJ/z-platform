@@ -11,6 +11,7 @@ import "react-toastify/dist/ReactToastify.css";
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [sendLoginLink, setSendLoginLink] = useState(false);
   const { auth } = useSelector((state) => state);
 
   const dispatch = useDispatch();
@@ -20,11 +21,14 @@ function Login() {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    dispatch(login({ email, password }));
+    // dispatch(login({ email, password }));
+
+    console.log("Payload", { email, password, sendLoginLink });
 
     // Reset form fields
     setEmail("");
     setPassword("");
+    setSendLoginLink(false);
   };
 
   useEffect(() => {
@@ -64,7 +68,11 @@ function Login() {
               setField={setPassword}
             />
             <span className="flex items-center space-x-2 font-thin text-sm">
-              <input type="checkbox" />
+              <input
+                type="checkbox"
+                name="sendLoginLink"
+                onChange={(e) => setSendLoginLink(e.target.checked)}
+              />
               <p>Send login link</p>
             </span>
             <p>
