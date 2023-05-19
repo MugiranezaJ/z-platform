@@ -44,14 +44,29 @@ The server will start running on http://localhost:3000.
 
 `GET /auth/verify-login/:token` - Login verification endpoint. Logs the user in when the login link is clicked.
 
+## Profile
+
 `POST /profile/update` - User profile update endpoint. Updates the user's profile information.
+`GET /profile?user={userID}` - Get user Profile endpoint.
 
 ### Verification
 
-`POST /verification/request` - Account verification request endpoint. Initiates the account verification process.
+`POST /verification/` - Account verification request endpoint. Initiates the account verification process.
 
 `POST /verification/approve` - Account verification callback endpoint. This is called to confirm account verification.
 
 `GET /verification` - Retrieves user's information about account status. Whether it is verified, pending or unverified
+
+## PENDING Features
+
+### Backend
+
+- Sending notification when a user is verified
+
+### Frontend
+
+- Password reset integration
+- Notification integration
+- Image Upload
 
 That's it! You have successfully set up and configured the backend for ZPlatform. You can now use the provided API endpoints to interact with the system.
