@@ -21,7 +21,7 @@ function Login() {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    // dispatch(login({ email, password }));
+    dispatch(login({ email, password }));
 
     console.log("Payload", { email, password, sendLoginLink });
 
